@@ -23,7 +23,7 @@ struct RainParticle {
 
 class Rain {
     public:
-    Rain(int amount = DEFAULT_RAIN_PARTICLE) {
+    Rain(int amount = DEFAULT_RAIN_PARTICLE, GLfloat floorLevel = -10.f) {
         glGenVertexArrays(1, &vao);
         glGenBuffers(1, &vbo);
         
@@ -35,6 +35,8 @@ class Rain {
         // position attribute
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
+
+        this->floorLevel = floorLevel;
 
         for (int i = 0; i < amount; i++) {
             RainParticle particle;
@@ -75,6 +77,7 @@ class Rain {
     private:
     GLuint vao;
     GLuint vbo;
+    GLfloat floorLevel;
     std::vector<RainParticle> particles;
 
     void createRainParticle(RainParticle* particle) {
