@@ -8,6 +8,7 @@
 #include "stb_image.h"
 #include "shader.hpp"
 #include "camera.hpp"
+#include "rain.hpp"
 
 using namespace std;
 
@@ -191,6 +192,7 @@ int main() {
     ourShader.setInt("texture1", 0);
     ourShader.setInt("texture2", 1);
 
+    Rain rainParticleSystem;
 
     // render loop
     // -----------
@@ -240,6 +242,11 @@ int main() {
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
+
+        projection = glm::perspective(glm::radians(100.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        ourShader.setMat4("projection", projection);
+        rainParticleSystem.Update();
+        rainParticleSystem.Render(ourShader);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------

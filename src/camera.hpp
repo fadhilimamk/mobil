@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-const float ZOOM_OUT = 50.0f;
+const float ZOOM_OUT = 80.0f;
 
 class Camera {
     public:
