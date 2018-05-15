@@ -44,6 +44,7 @@ class Rain {
             particles.push_back(particle);
         }
 
+        glBindVertexArray(0);
     }
 
     void Update() {
