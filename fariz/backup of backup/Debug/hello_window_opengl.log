@@ -1,0 +1,16 @@
+﻿  main.cpp
+d:\experiment\opengl\serius_laa\hello_window\hello_window_opengl\hello_window_opengl\rain.hpp(17): warning C4838: conversion from 'double' to 'const GLfloat' requires a narrowing conversion
+d:\experiment\opengl\serius_laa\hello_window\hello_window_opengl\hello_window_opengl\rain.hpp(17): warning C4305: 'initializing': truncation from 'double' to 'const GLfloat'
+d:\experiment\opengl\serius_laa\hello_window\hello_window_opengl\hello_window_opengl\main.cpp(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\experiment\opengl\serius_laa\hello_window\hello_window_opengl\hello_window_opengl\main.cpp(34): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\experiment\opengl\serius_laa\hello_window\hello_window_opengl\hello_window_opengl\main.cpp(37): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\experiment\opengl\serius_laa\hello_window\hello_window_opengl\hello_window_opengl\main.cpp(38): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\experiment\opengl\serius_laa\hello_window\hello_window_opengl\hello_window_opengl\main.cpp(39): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\experiment\opengl\serius_laa\hello_window\hello_window_opengl\hello_window_opengl\main.cpp(40): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\experiment\opengl\serius_laa\hello_window\hello_window_opengl\hello_window_opengl\main.cpp(46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\experiment\opengl\serius_laa\hello_window\hello_window_opengl\hello_window_opengl\main.cpp(240): warning C4305: 'argument': truncation from 'double' to 'float'
+d:\experiment\opengl\serius_laa\hello_window\hello_window_opengl\hello_window_opengl\main.cpp(245): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\experiment\opengl\serius_laa\hello_window\hello_window_opengl\hello_window_opengl\main.cpp(285): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+d:\experiment\opengl\serius_laa\hello_window\hello_window_opengl\hello_window_opengl\main.cpp(290): warning C4305: 'argument': truncation from 'double' to 'float'
+d:\experiment\opengl\serius_laa\hello_window\hello_window_opengl\hello_window_opengl\main.cpp(296): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+  hello_window_opengl.vcxproj -> D:\Experiment\opengl\serius_laa\hello_window\hello_window_opengl\Debug\hello_window_opengl.exe

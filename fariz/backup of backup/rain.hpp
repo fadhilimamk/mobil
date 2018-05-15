@@ -4,9 +4,9 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-#include "shader.hpp"
+#include "Shader.h"
 
-static const int DEFAULT_RAIN_PARTICLE = 10000;
+static const int DEFAULT_RAIN_PARTICLE = 2000;
 static const GLfloat RAIN_VERTICES[] = {
             -0.02, 0.0f, 0.0f,
             0.0f, 0.3f, 0.0f,
@@ -44,7 +44,7 @@ class Rain {
             particles.push_back(particle);
         }
 
-        glBindVertexArray(0);
+		glBindVertexArray(0);
     }
 
     void Update() {
