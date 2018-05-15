@@ -11,7 +11,7 @@
 #include "model.hpp"
 #include "floor.hpp"
 #include "rain.hpp"
-#include "particle.hpp"
+#include "smoke.hpp"
 
 using namespace std;
 
@@ -25,13 +25,10 @@ const unsigned int SCR_HEIGHT = 768;
 // init camera
 Camera camera(glm::vec3(0.0f, 5.0f, 15.0f));
 
-// Global Variables
+
+// delta time
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
-
-float randRange(float LO, float HI) {
-	return (LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO))));
-}
 
 int main(int argc, char** argv) {
 	
@@ -67,10 +64,10 @@ int main(int argc, char** argv) {
     // init shaders
     Shader shader("src/vertex_shader.vs", "src/fragment_shader.fs");
     Shader rainShader("src/vertex_shader_rain.vs", "src/fragment_shader_rain.fs");
-	Shader smoke_shader("test_particle_vector.vs", "test_particle_fragment.fs");
-	
+    Shader smokeShader("src/vertex_shader_smoke.vs", "src/fragment_shader_smoke.fs");
+
     glShadeModel(GL_SMOOTH);
-    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClearDepth(1.0);
 
     // enable depth buffer
@@ -80,13 +77,51 @@ int main(int argc, char** argv) {
     Model car("assets/van/kendo.obj");
     Floor ground;
     Rain rainParticleSystem;
+    std::vector<Smoke> smokeParticleSystem;
+    smokeParticleSystem.push_back(Smoke(
+        glm::vec3(-2.5f, 0.3f, -0.58f), // initial position
+        glm::vec3(1, 0, 0), //color
+        50, //amount
+        3, //life
+        0.5f //scale
+    ));
+
+    smokeParticleSystem.push_back(Smoke(
+        glm::vec3(-2.5f, 0.3f, -0.47f), // initial position
+        glm::vec3(0, 1, 0), //color
+        50, //amount
+        3, //life
+        0.5f //scale
+    ));
+
+    smokeParticleSystem.push_back(Smoke(
+        glm::vec3(-2.5f, 0.3f, 0.48f), // initial position
+        glm::vec3(0, 0, 1), //color
+        50, //amount
+        3, //life
+        0.5f //scale
+    ));
+
+    smokeParticleSystem.push_back(Smoke(
+        glm::vec3(-2.5f, 0.3f, 0.6f), // initial position
+        glm::vec3(1, 1, 0), //color
+        50, //amount
+        3, //life
+        0.5f //scale
+    ));
 
     while(!glfwWindowShouldClose(window)) {
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        camera.gotoRight(0.1f);
         rainParticleSystem.Update();
+
+        for (int i = 0; i < smokeParticleSystem.size(); i++) {
+            smokeParticleSystem[i].Update(deltaTime);
+        }
 
         // set view matrix
         glm::mat4 view = camera.getViewMatrix();
@@ -127,6 +162,15 @@ int main(int argc, char** argv) {
         rainParticleSystem.Render(rainShader);
         // ground.Render(rainShader);
 
+        smokeShader.use();
+        smokeShader.setMat4("projection", projection);
+        smokeShader.setMat4("view", view);
+        smokeShader.setMat4("model", model);
+
+        for (int i = 0; i < smokeParticleSystem.size(); i++) {
+            smokeParticleSystem[i].Render(smokeShader);
+        }
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -144,7 +188,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 
     if (key == GLFW_KEY_A)
         a_pressed = action == GLFW_PRESS ? 1 : (action == GLFW_RELEASE ? 0 : a_pressed);
-    else if (key == GLFW_KEY_S)
+    else if (key == GLFW_KEY_D)
         d_pressed = action == GLFW_PRESS ? 1 : (action == GLFW_RELEASE ? 0 : d_pressed);
     
     if (a_pressed)
