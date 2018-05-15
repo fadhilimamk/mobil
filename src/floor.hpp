@@ -4,12 +4,12 @@
 #include "shader.hpp"
 
 static const GLfloat FLOOR_VERTICES[] = {
-            -3.0f, 0.0f, -3.0f,
-            -3.0f, 0.0f, 3.0f, 
-            3.0f, 0.0f, 3.0f, 
-            -3.0f, 0.0f, -3.0f, 
-            3.0f, 0.0f, 3.0f, 
-            3.0f, 0.0f, -3.0f
+            -10.0f, 0.0f, -10.0f,0.0, 1.0, 0.0, 
+            -10.0f, 0.0f, 10.0f, 0.0, 1.0, 0.0, 
+            10.0f, 0.0f, 10.0f, 0.0, 1.0, 0.0, 
+            -10.0f, 0.0f, -10.0f, 0.0, 1.0, 0.0, 
+            10.0f, 0.0f, 10.0f, 0.0, 1.0, 0.0, 
+            10.0f, 0.0f, -10.0f, 0.0, 1.0, 0.0
         };
 
 class Floor {
@@ -25,16 +25,21 @@ class Floor {
         glBufferData(GL_ARRAY_BUFFER, sizeof(FLOOR_VERTICES), FLOOR_VERTICES, GL_STATIC_DRAW);
 
         // position attribute
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
+
+        // normal attribute
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
     }
 
     void Render(Shader shader) {
         glBindVertexArray(vao);
         glm::mat4 model;
         model = glm::translate(model, glm::vec3(0.0f, floorLevel, 0.0f));
-        shader.setMat4("model", model);
-        shader.setVec4("color", glm::vec4(0.3f, 0.0f, 0.0f, 1.0f));
+        // shader.setMat4("model", model);
+        shader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+        shader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);

@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow( SCR_WIDTH, SCR_HEIGHT, "Grafika-Car with lighting", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow( SCR_WIDTH, SCR_HEIGHT, "Grafika - Mobil Bagus", NULL, NULL);
     if(!window){
         fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
         glfwTerminate();
@@ -66,11 +66,12 @@ int main(int argc, char** argv) {
 
     // init shaders
     Shader shader("src/vertex_shader.vs", "src/fragment_shader.fs");
+    Shader floorShader("src/vertex_shader_floor.vs", "src/fragment_shader_floor.fs");
     Shader rainShader("src/vertex_shader_rain.vs", "src/fragment_shader_rain.fs");
     Shader smokeShader("src/vertex_shader_smoke.vs", "src/fragment_shader_smoke.fs");
 
     glShadeModel(GL_SMOOTH);
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.17, 0.18, 0.2, 1.0);
     glClearDepth(1.0);
 
     // enable depth buffer
@@ -117,6 +118,8 @@ int main(int argc, char** argv) {
     nbFrames = 0;
     lastTime = glfwGetTime();
 
+    glm::mat4 originalView = camera.getViewMatrix();
+
     while(!glfwWindowShouldClose(window)) {
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
@@ -159,32 +162,39 @@ int main(int argc, char** argv) {
         shader.setMat4("model", model);
 
         // lighting
-        glm::vec3 lightSource = camera.Position + glm::vec3(0.0f, 10.0f, 0.0f);
-        shader.setInt("material.specular", 100);
-        shader.setFloat("material.shiness", 10.0f);
+        glm::vec3 lightSource = glm::vec3(1.0f, 5.0f, 0.0f);
+        shader.setInt("material.specular", 50);
+        shader.setFloat("material.shiness", 32.0f);
         shader.setVec3("light.position", lightSource);
         shader.setVec3("viewPos", camera.Position);
         shader.setVec3("light.ambient", 0.5f, 0.5f, 0.5f);
         shader.setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
         shader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-
         car.Draw(shader);
+
+        floorShader.use();
+        floorShader.setMat4("projection", projection);
+        floorShader.setMat4("view", originalView);
+        floorShader.setMat4("model", model);
+        floorShader.setVec3("lightPos", lightSource);
+        floorShader.setVec3("viewPos", camera.Position);
+        ground.Render(floorShader);
 
         rainShader.use();
         rainShader.setMat4("projection", projection);
         rainShader.setMat4("view", view);
         rainShader.setMat4("model", model);
         rainParticleSystem.Render(rainShader);
-        ground.Render(rainShader);
 
         smokeShader.use();
         smokeShader.setMat4("projection", projection);
         smokeShader.setMat4("view", view);
         smokeShader.setMat4("model", model);
-
         for (int i = 0; i < smokeParticleSystem.size(); i++) {
             smokeParticleSystem[i].Render(smokeShader);
         }
+
+        camera.gotoRight(0.1f);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

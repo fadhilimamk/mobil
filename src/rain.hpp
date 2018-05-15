@@ -6,7 +6,7 @@
 
 #include "shader.hpp"
 
-static const int DEFAULT_RAIN_PARTICLE = 10000;
+static const int DEFAULT_RAIN_PARTICLE = 7000;
 static const GLfloat RAIN_VERTICES[] = {
             -0.02, 0.0f, 0.0f,
             0.0f, 0.3f, 0.0f,

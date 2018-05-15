@@ -130,7 +130,7 @@ public:
 			
 			shader.setFloat("opacity", 0.3f - particle->dt * 5);
             
-            shader.setMat4("model", model);
+			shader.setMat4("model", model);
             shader.setVec3("color", color);
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
