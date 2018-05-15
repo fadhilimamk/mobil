@@ -1,9 +1,5 @@
-#ifndef SHADER_H
-#define SHADER_H
-
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <bits/stdc++.h>
+#pragma once
+#include <glm\glm.hpp>
 
 #include <string>
 #include <fstream>
@@ -191,4 +187,3 @@ private:
         }
     }
 };
-#endif
