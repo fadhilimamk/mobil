@@ -23,7 +23,7 @@ const unsigned int SCR_WIDTH = 1024;
 const unsigned int SCR_HEIGHT = 768;
 
 // init camera
-Camera camera(glm::vec3(0.0f, 5.0f, 15.0f));
+Camera camera(glm::vec3(0.0f, 10.0f, 15.0f));
 
 // FPS counter variable
 double lastTime;
@@ -174,7 +174,7 @@ int main(int argc, char** argv) {
 
         floorShader.use();
         floorShader.setMat4("projection", projection);
-        floorShader.setMat4("view", originalView);
+        floorShader.setMat4("view", view);
         floorShader.setMat4("model", model);
         floorShader.setVec3("lightPos", lightSource);
         floorShader.setVec3("viewPos", camera.Position);

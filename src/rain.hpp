@@ -84,8 +84,8 @@ class Rain {
     std::vector<RainParticle> particles;
 
     void createRainParticle(RainParticle* particle) {
-        float x = (float) (rand() % 10000) / 10000.0f * 200.0f - 100.0f;
-        float z = (float) (rand() % 10000) / 10000.0f * 200.0f - 100.0f;
+        float x = (float) (rand() % 10000) / 10000.0f * 150.0f - 75.0f;
+        float z = (float) (rand() % 10000) / 10000.0f * 150.0f - 75.0f;
         float y = (float) (rand() % 10000) / 10000.0f * 50.0f + 50.0f;
         float life = (float) ((rand() + 5000) % 10000) / 10000.0f;
 
