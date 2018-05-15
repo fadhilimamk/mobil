@@ -11,6 +11,7 @@
 #include "model.hpp"
 #include "floor.hpp"
 #include "rain.hpp"
+#include "particle.hpp"
 
 using namespace std;
 
@@ -23,6 +24,14 @@ const unsigned int SCR_HEIGHT = 768;
 
 // init camera
 Camera camera(glm::vec3(0.0f, 5.0f, 15.0f));
+
+// Global Variables
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+
+float randRange(float LO, float HI) {
+	return (LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO))));
+}
 
 int main(int argc, char** argv) {
 	
@@ -58,7 +67,8 @@ int main(int argc, char** argv) {
     // init shaders
     Shader shader("src/vertex_shader.vs", "src/fragment_shader.fs");
     Shader rainShader("src/vertex_shader_rain.vs", "src/fragment_shader_rain.fs");
-
+	Shader smoke_shader("test_particle_vector.vs", "test_particle_fragment.fs");
+	
     glShadeModel(GL_SMOOTH);
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glClearDepth(1.0);
