@@ -24,6 +24,10 @@ const unsigned int SCR_HEIGHT = 768;
 // init camera
 Camera camera(glm::vec3(0.0f, 5.0f, 15.0f));
 
+// FPS counter variable
+double lastTime;
+int nbFrames;
+
 int main(int argc, char** argv) {
 	
     // init window
@@ -71,7 +75,19 @@ int main(int argc, char** argv) {
     Floor ground;
     Rain rainParticleSystem;
 
+    // Prepare for FPS calculation
+    nbFrames = 0;
+    lastTime = glfwGetTime();
+
     while(!glfwWindowShouldClose(window)) {
+
+        double currentTime = glfwGetTime();
+        nbFrames++;
+        if (currentTime - lastTime >= 1.0) {
+            printf("%d fps | %f ms/frame\n", nbFrames, 1000.0/double(nbFrames));
+            nbFrames = 0;
+            lastTime += 1.0;
+        }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -115,7 +131,7 @@ int main(int argc, char** argv) {
         rainShader.setMat4("view", view);
         rainShader.setMat4("model", model);
         rainParticleSystem.Render(rainShader);
-        // ground.Render(rainShader);
+        ground.Render(rainShader);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
