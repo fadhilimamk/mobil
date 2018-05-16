@@ -34,6 +34,7 @@ int nbFrames;
 // delta time
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
+GLfloat ambient = 0.3f;
 
 int carType = 0;
 int prevCarType = 0;
@@ -191,7 +192,7 @@ int main(int argc, char** argv) {
         shader.setFloat("material.shiness", 0.0f);
         shader.setVec3("light.position", lightSource);
         shader.setVec3("viewPos", camera.Position);
-        shader.setVec3("light.ambient", 0.5f, 0.5f, 0.5f);
+        shader.setVec3("light.ambient", ambient, ambient, ambient);
         shader.setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
         shader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
         models[carType].Draw(shader);
@@ -269,4 +270,17 @@ void processInput(GLFWwindow *window){
         camera.gotoLeft(0.5);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.gotoRight(0.5);
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
+        ambient += 0.05f;
+        if (ambient > 1.0f) {
+            ambient = 1;
+        }
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
+        ambient -= 0.05f;
+        if (ambient < 0.0f) {
+            ambient = 0;
+        }
+    }    
 }
