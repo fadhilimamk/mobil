@@ -72,10 +72,11 @@ int main(int argc, char** argv) {
     Shader smokeShader("src/vertex_shader_smoke.vs", "src/fragment_shader_smoke.fs");
 
     glShadeModel(GL_SMOOTH);
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
     glClearDepth(1.0);
 
     // enable depth buffer
+    glEnable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
 
     // init model and particle
@@ -86,7 +87,7 @@ int main(int argc, char** argv) {
     smokeParticleSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, -0.58f), // initial position
         glm::vec3(1, 0, 0), //color
-        50, //amount
+        25, //amount
         3, //life
         0.5f //scale
     ));
@@ -94,7 +95,7 @@ int main(int argc, char** argv) {
     smokeParticleSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, -0.47f), // initial position
         glm::vec3(0, 1, 0), //color
-        50, //amount
+        25, //amount
         3, //life
         0.5f //scale
     ));
@@ -102,7 +103,7 @@ int main(int argc, char** argv) {
     smokeParticleSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, 0.48f), // initial position
         glm::vec3(0, 0, 1), //color
-        50, //amount
+        25, //amount
         3, //life
         0.5f //scale
     ));
@@ -110,7 +111,7 @@ int main(int argc, char** argv) {
     smokeParticleSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, 0.6f), // initial position
         glm::vec3(1, 1, 0), //color
-        50, //amount
+        25, //amount
         3, //life
         0.5f //scale
     ));
