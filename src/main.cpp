@@ -70,6 +70,7 @@ int main(int argc, char** argv) {
     Shader shader("src/vertex_shader.vs", "src/fragment_shader.fs");
     Shader rainShader("src/vertex_shader_rain.vs", "src/fragment_shader_rain.fs");
     Shader smokeShader("src/vertex_shader_smoke.vs", "src/fragment_shader_smoke.fs");
+    Shader floorShader("src/vertex_shader_floor.vs", "src/fragment_shader_floor.fs");
 
     glShadeModel(GL_SMOOTH);
     glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
@@ -87,7 +88,7 @@ int main(int argc, char** argv) {
     smokeParticleSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, -0.58f), // initial position
         glm::vec3(0.1f, 0.1f, 0.1f), //color
-        25, //amount
+        50, //amount
         3, //life
         0.5f //scale
     ));
@@ -95,7 +96,7 @@ int main(int argc, char** argv) {
     smokeParticleSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, -0.47f), // initial position
         glm::vec3(0.1f, 0.1f, 0.1f), //color
-        25, //amount
+        50, //amount
         3, //life
         0.5f //scale
     ));
@@ -103,7 +104,7 @@ int main(int argc, char** argv) {
     smokeParticleSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, 0.48f), // initial position
         glm::vec3(0.1f, 0.1f, 0.1f), //color
-        25, //amount
+        50, //amount
         3, //life
         0.5f //scale
     ));
@@ -111,7 +112,7 @@ int main(int argc, char** argv) {
     smokeParticleSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, 0.6f), // initial position
         glm::vec3(0.1f, 0.1f, 0.1f), //color
-        25, //amount
+        50, //amount
         3, //life
         0.5f //scale
     ));
@@ -178,7 +179,11 @@ int main(int argc, char** argv) {
         rainShader.setMat4("view", view);
         rainShader.setMat4("model", model);
         rainParticleSystem.Render(rainShader);
-        ground.Render(rainShader);
+
+        floorShader.use();
+        floorShader.setMat4("projection", projection);
+        floorShader.setMat4("view", view);
+        ground.Render(floorShader);
 
         smokeShader.use();
         smokeShader.setMat4("projection", projection);
