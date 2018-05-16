@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
     // init model and particle
     models.push_back(Model("assets/van/kendo.obj"));
     models.push_back(Model("assets/car/car.obj"));
-    models.push_back(Model("assets/bus/bus.obj"));
+    models.push_back(Model("assets/natla/natla_car.obj"));
 
     Floor ground;
     Rain rainParticleSystem;
