@@ -1,0 +1,4 @@
+for file in *.dds
+do
+    convert "$file" "$(basename "$file" .dds).bmp"
+done
