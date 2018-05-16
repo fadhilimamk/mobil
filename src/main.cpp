@@ -78,7 +78,7 @@ int main(int argc, char** argv) {
     Shader smokeShader("src/vertex_shader_smoke.vs", "src/fragment_shader_smoke.fs");
 
     glShadeModel(GL_SMOOTH);
-    glClearColor(0.17, 0.18, 0.2, 1.0);
+    glClearColor(0, 0, 0, 1.0);
     glClearDepth(1.0);
 
     // enable depth buffer

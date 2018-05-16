@@ -6,7 +6,7 @@
 
 #include "shader.hpp"
 
-static const int DEFAULT_RAIN_PARTICLE = 7000;
+static const int DEFAULT_RAIN_PARTICLE = 10000;
 static const GLfloat RAIN_VERTICES[] = {
             -0.02, 0.0f, 0.0f,
             0.0f, 0.3f, 0.0f,
@@ -30,7 +30,7 @@ class Rain {
         glBindVertexArray(vao);
 
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(RAIN_VERTICES), RAIN_VERTICES, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(RAIN_VERTICES), RAIN_VERTICES, GL_DYNAMIC_DRAW);
 
         // position attribute
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
