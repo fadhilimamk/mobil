@@ -103,6 +103,7 @@ public:
             SmokeParticle* particle = &particles[i];
 
             if (particle->life >= 0) {
+				// particle->direction += glm::vec3(0.0f, randRange(-0.02f, 0.02f), randRange(-0.02f, 0.02f));
             	particle->dt = particle->dt + deltaTime * 0.1;
 				particle->life -= deltaTime;
             } else {
@@ -128,9 +129,10 @@ public:
 			GLfloat currentScale = particle->scale;
 			model = glm::scale(model, glm::vec3(currentScale, currentScale, currentScale));
 			
+			// shader.setFloat("opacity", 0.2f - particle->dt * 5);
 			shader.setFloat("opacity", particle->life);
             
-            shader.setMat4("model", model);
+			shader.setMat4("model", model);
             shader.setVec3("color", color);
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -154,9 +156,9 @@ private:
 	}
 	void createSmokeParticle(SmokeParticle* particle) {
         particle->direction = glm::vec3(-1.0f, randRange(-0.1f, 0.1f), randRange(-0.1f, 0.1f));
-        particle->velocity = randRange(5, 7);
+        particle->velocity = randRange(7, 10);
 		particle->position = initialPos;
-		particle->life = randRange(maxLife/2, maxLife);
+		particle->life = randRange(maxLife/4, maxLife/2);
 		particle->scale = 1;
 		particle->dt = 0;
     }

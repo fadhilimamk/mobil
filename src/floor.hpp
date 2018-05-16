@@ -89,6 +89,7 @@ class Floor {
         glBindVertexArray(vao);
         glm::mat4 model;
         model = glm::translate(model, glm::vec3(0.0f, floorLevel, 0.0f));
+
         model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
         model = glm::scale(model, glm::vec3(10));
         shader.setMat4("model", model);
