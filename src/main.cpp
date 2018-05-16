@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
     std::vector<Smoke> smokeParticleSystem;
     smokeParticleSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, -0.58f), // initial position
-        glm::vec3(1, 0, 0), //color
+        glm::vec3(0.1f, 0.1f, 0.1f), //color
         25, //amount
         3, //life
         0.5f //scale
@@ -94,7 +94,7 @@ int main(int argc, char** argv) {
 
     smokeParticleSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, -0.47f), // initial position
-        glm::vec3(0, 1, 0), //color
+        glm::vec3(0.1f, 0.1f, 0.1f), //color
         25, //amount
         3, //life
         0.5f //scale
@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
 
     smokeParticleSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, 0.48f), // initial position
-        glm::vec3(0, 0, 1), //color
+        glm::vec3(0.1f, 0.1f, 0.1f), //color
         25, //amount
         3, //life
         0.5f //scale
@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
 
     smokeParticleSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, 0.6f), // initial position
-        glm::vec3(1, 1, 0), //color
+        glm::vec3(0.1f, 0.1f, 0.1f), //color
         25, //amount
         3, //life
         0.5f //scale
