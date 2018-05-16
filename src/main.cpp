@@ -35,6 +35,7 @@ int nbFrames;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 GLfloat ambient = 0.3f;
+GLfloat diffuse = 1.0f;
 
 int carType = 0;
 int prevCarType = 0;
@@ -193,7 +194,7 @@ int main(int argc, char** argv) {
         shader.setVec3("light.position", lightSource);
         shader.setVec3("viewPos", camera.Position);
         shader.setVec3("light.ambient", ambient, ambient, ambient);
-        shader.setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
+        shader.setVec3("light.diffuse", diffuse, diffuse, diffuse);
         shader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
         models[carType].Draw(shader);
 
@@ -208,8 +209,8 @@ int main(int argc, char** argv) {
         floorShader.setMat4("view", view);
 
         floorShader.setVec3("light.position", lightSource);
-        floorShader.setVec3("light.ambient", 0.5f, 0.5f, 0.5f);
-        floorShader.setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
+        floorShader.setVec3("light.ambient", ambient, ambient, ambient);
+        floorShader.setVec3("light.diffuse", diffuse, diffuse, diffuse);
         floorShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
         ground.Render(floorShader);
@@ -281,6 +282,20 @@ void processInput(GLFWwindow *window){
         ambient -= 0.05f;
         if (ambient < 0.0f) {
             ambient = 0;
+        }
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
+        diffuse += 0.05f;
+        if (diffuse > 1.0f) {
+            diffuse = 1;
+        }
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
+        diffuse -= 0.05f;
+        if (diffuse < 0.0f) {
+            diffuse = 0;
         }
     }    
 }
