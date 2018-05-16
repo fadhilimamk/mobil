@@ -92,38 +92,48 @@ int main(int argc, char** argv) {
 
     Floor ground;
     Rain rainParticleSystem;
-    std::vector<Smoke> smokeParticleSystem;
-    smokeParticleSystem.push_back(Smoke(
+
+    std::vector<std::vector<Smoke>> smokeParticleSystem;
+
+    std::vector<Smoke> vanSmokeSystem;
+    vanSmokeSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, -0.58f), // initial position
         glm::vec3(0.1f, 0.1f, 0.1f), //color
-        25, //amount
+        50, //amount
         3, //life
         0.5f //scale
     ));
 
-    smokeParticleSystem.push_back(Smoke(
+    vanSmokeSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, -0.47f), // initial position
         glm::vec3(0.1f, 0.1f, 0.1f), //color
-        25, //amount
+        50, //amount
         3, //life
         0.5f //scale
     ));
 
-    smokeParticleSystem.push_back(Smoke(
+    vanSmokeSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, 0.48f), // initial position
         glm::vec3(0.1f, 0.1f, 0.1f), //color
-        25, //amount
+        50, //amount
         3, //life
         0.5f //scale
     ));
 
-    smokeParticleSystem.push_back(Smoke(
+    vanSmokeSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, 0.6f), // initial position
         glm::vec3(0.1f, 0.1f, 0.1f), //color
-        25, //amount
+        50, //amount
         3, //life
         0.5f //scale
     ));
+    smokeParticleSystem.push_back(vanSmokeSystem);
+
+    std::vector<Smoke> carSmokeSystem;
+    smokeParticleSystem.push_back(carSmokeSystem);
+
+    std::vector<Smoke> busSmokeSystem;
+    smokeParticleSystem.push_back(busSmokeSystem);
 
     // Prepare for FPS calculation
     nbFrames = 0;
@@ -150,8 +160,8 @@ int main(int argc, char** argv) {
 
         rainParticleSystem.Update();
 
-        for (int i = 0; i < smokeParticleSystem.size(); i++) {
-            smokeParticleSystem[i].Update(deltaTime);
+        for (int i = 0; i < smokeParticleSystem[carType].size(); i++) {
+            smokeParticleSystem[carType][i].Update(deltaTime);
         }
 
         // set view matrix
@@ -175,9 +185,10 @@ int main(int argc, char** argv) {
         shader.setMat4("model", model);
 
         // lighting
-        glm::vec3 lightSource = glm::vec3(1.0f, 5.0f, 0.0f);
+        glm::vec3 lightSource = glm::vec3(sin((float)glfwGetTime() * 20.0f), 5.0f, 10.0f);
+        
         shader.setInt("material.specular", 50);
-        shader.setFloat("material.shiness", 32.0f);
+        shader.setFloat("material.shiness", 0.0f);
         shader.setVec3("light.position", lightSource);
         shader.setVec3("viewPos", camera.Position);
         shader.setVec3("light.ambient", 0.5f, 0.5f, 0.5f);
@@ -185,31 +196,30 @@ int main(int argc, char** argv) {
         shader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
         models[carType].Draw(shader);
 
-        floorShader.use();
-        floorShader.setMat4("projection", projection);
-        floorShader.setMat4("view", originalView);
-        floorShader.setMat4("model", model);
-        floorShader.setVec3("lightPos", lightSource);
-        floorShader.setVec3("viewPos", camera.Position);
-        ground.Render(floorShader);
-
         rainShader.use();
         rainShader.setMat4("projection", projection);
         rainShader.setMat4("view", view);
         rainShader.setMat4("model", model);
         rainParticleSystem.Render(rainShader);
 
-        if (carType == 0) {
-            smokeShader.use();
-            smokeShader.setMat4("projection", projection);
-            smokeShader.setMat4("view", view);
-            smokeShader.setMat4("model", model);
-            for (int i = 0; i < smokeParticleSystem.size(); i++) {
-                smokeParticleSystem[i].Render(smokeShader);
-            }
-        }
+        floorShader.use();
+        floorShader.setMat4("projection", projection);
+        floorShader.setMat4("view", view);
 
-        camera.gotoRight(0.05f);
+        floorShader.setVec3("light.position", lightSource);
+        floorShader.setVec3("light.ambient", 0.5f, 0.5f, 0.5f);
+        floorShader.setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
+        floorShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+        ground.Render(floorShader);
+
+        smokeShader.use();
+        smokeShader.setMat4("projection", projection);
+        smokeShader.setMat4("view", view);
+        smokeShader.setMat4("model", model);
+        for (int i = 0; i < smokeParticleSystem[carType].size(); i++) {
+            smokeParticleSystem[carType][i].Render(smokeShader);
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -225,6 +235,10 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     static bool left_pressed = false;
     static bool right_pressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, true);
+    }
 
     if (key == GLFW_KEY_LEFT)
         left_pressed = action == GLFW_PRESS ? 1 : (action == GLFW_RELEASE ? 0 : left_pressed);

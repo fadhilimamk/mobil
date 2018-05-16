@@ -11,47 +11,47 @@
 
 static const int DEFAULT_SMOKE_PARTICLE = 10000;
 static const GLfloat SMOKE_VERTICES[] = {
-		-0.2f, -0.2f, -0.2f,
-		0.2f, -0.2f, -0.2f,
-		0.2f,  0.2f, -0.2f,
-		0.2f,  0.2f, -0.2f,
-		-0.2f,  0.2f, -0.2f,
-		-0.2f, -0.2f, -0.2f,
+		-0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.5f,  0.5f, -0.5f,
+		0.5f,  0.5f, -0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
 
-		-0.2f, -0.2f,  0.2f,
-		0.2f, -0.2f,  0.2f,
-		0.2f,  0.2f,  0.2f,
-		0.2f,  0.2f,  0.2f,
-		-0.2f,  0.2f,  0.2f,
-		-0.2f, -0.2f,  0.2f,
+		-0.5f, -0.5f,  0.5f,
+		0.5f, -0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
 
-		-0.2f,  0.2f,  0.2f,
-		-0.2f,  0.2f, -0.2f,
-		-0.2f, -0.2f, -0.2f,
-		-0.2f, -0.2f, -0.2f,
-		-0.2f, -0.2f,  0.2f,
-		-0.2f,  0.2f,  0.2f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
 
-		0.2f,  0.2f,  0.2f,
-		0.2f,  0.2f, -0.2f,
-		0.2f, -0.2f, -0.2f,
-		0.2f, -0.2f, -0.2f,
-		0.2f, -0.2f,  0.2f,
-		0.2f,  0.2f,  0.2f,
+		0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
 
-		-0.2f, -0.2f, -0.2f,
-		0.2f, -0.2f, -0.2f,
-		0.2f, -0.2f,  0.2f,
-		0.2f, -0.2f,  0.2f,
-		-0.2f, -0.2f,  0.2f,
-		-0.2f, -0.2f, -0.2f,
+		-0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f,  0.5f,
+		0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f, -0.5f,
 
-		-0.2f,  0.2f, -0.2f,
-		0.2f,  0.2f, -0.2f,
-		0.2f,  0.2f,  0.2f,
-		0.2f,  0.2f,  0.2f,
-		-0.2f,  0.2f,  0.2f,
-		-0.2f,  0.2f, -0.2f
+		-0.5f,  0.5f, -0.5f,
+		0.5f,  0.5f, -0.5f,
+		0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f
         };
 
 struct SmokeParticle {
@@ -103,7 +103,7 @@ public:
             SmokeParticle* particle = &particles[i];
 
             if (particle->life >= 0) {
-				particle->direction += glm::vec3(0.0f, randRange(-0.02f, 0.02f), randRange(-0.02f, 0.02f));
+				// particle->direction += glm::vec3(0.0f, randRange(-0.02f, 0.02f), randRange(-0.02f, 0.02f));
             	particle->dt = particle->dt + deltaTime * 0.1;
 				particle->life -= deltaTime;
             } else {
@@ -119,9 +119,7 @@ public:
         	SmokeParticle* particle = &particles[i];
 
             glm::mat4 model = glm::mat4(1.0f);
-			float x = (float) (rand() % 100) / 100.0f * 0.2f - 0.1f;
-			float z = (float) (rand() % 100) / 100.0f * 0.2f - 0.1f;
-			model = glm::translate(model, initialPos + glm::vec3(x, 0.0f, z));
+			model = glm::translate(model, initialPos);
 			model = glm::translate(model, particle->direction * particle->dt * particle->velocity);
 
 			model = glm::rotate(model, (float)glfwGetTime() * glm::radians(-55.0f), glm::vec3(1, 0, 0));
@@ -158,9 +156,9 @@ private:
 	}
 	void createSmokeParticle(SmokeParticle* particle) {
         particle->direction = glm::vec3(-1.0f, randRange(-0.1f, 0.1f), randRange(-0.1f, 0.1f));
-        particle->velocity = randRange(5, 7);
+        particle->velocity = randRange(7, 10);
 		particle->position = initialPos;
-		particle->life = randRange(maxLife/4, maxLife);
+		particle->life = randRange(maxLife/4, maxLife/2);
 		particle->scale = 1;
 		particle->dt = 0;
     }
