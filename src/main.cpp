@@ -194,7 +194,7 @@ int main(int argc, char** argv) {
             smokeParticleSystem[i].Render(smokeShader);
         }
 
-        camera.gotoRight(0.1f);
+        camera.gotoRight(0.05f);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
