@@ -18,6 +18,7 @@ using namespace std;
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void processInput(GLFWwindow *window);
 
 // screen settings
 const unsigned int SCR_WIDTH = 1024;
@@ -33,6 +34,10 @@ int nbFrames;
 // delta time
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
+
+int carType = 0;
+int nbCars = 2;
+int prevCarType = 0;
 
 int main(int argc, char** argv) {
 	
@@ -56,8 +61,8 @@ int main(int argc, char** argv) {
     }
 
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-    glfwSetKeyCallback(window, keyCallback);
     glfwMakeContextCurrent(window);
+    glfwSetKeyCallback(window, keyCallback);
     glfwSetScrollCallback(window, scroll_callback);
 
     glewExperimental = true;
@@ -73,8 +78,7 @@ int main(int argc, char** argv) {
     Shader smokeShader("src/vertex_shader_smoke.vs", "src/fragment_shader_smoke.fs");
 
     glShadeModel(GL_SMOOTH);
-    // glClearColor(0.17, 0.18, 0.2, 1.0);
-    glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+    glClearColor(0.17, 0.18, 0.2, 1.0);
     glClearDepth(1.0);
 
     // enable depth buffer
@@ -137,6 +141,16 @@ int main(int argc, char** argv) {
             lastTime += 1.0;
         }
 
+        processInput(window);
+
+        if (carType != prevCarType) {
+            if (carType == 0) {
+                car = Model("assets/van/kendo.obj");
+            } else {
+                car = Model("assets/car/car.obj");
+            }
+        }
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         rainParticleSystem.Update();
@@ -190,12 +204,14 @@ int main(int argc, char** argv) {
         rainShader.setMat4("model", model);
         rainParticleSystem.Render(rainShader);
 
-        smokeShader.use();
-        smokeShader.setMat4("projection", projection);
-        smokeShader.setMat4("view", view);
-        smokeShader.setMat4("model", model);
-        for (int i = 0; i < smokeParticleSystem.size(); i++) {
-            smokeParticleSystem[i].Render(smokeShader);
+        if (carType == 0) {
+            smokeShader.use();
+            smokeShader.setMat4("projection", projection);
+            smokeShader.setMat4("view", view);
+            smokeShader.setMat4("model", model);
+            for (int i = 0; i < smokeParticleSystem.size(); i++) {
+                smokeParticleSystem[i].Render(smokeShader);
+            }
         }
 
         camera.gotoRight(0.05f);
@@ -212,20 +228,33 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 }
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    static bool a_pressed = false;
-    static bool d_pressed = false;
+    static bool left_pressed = false;
+    static bool right_pressed = false;
 
-    if (key == GLFW_KEY_A)
-        a_pressed = action == GLFW_PRESS ? 1 : (action == GLFW_RELEASE ? 0 : a_pressed);
-    else if (key == GLFW_KEY_D)
-        d_pressed = action == GLFW_PRESS ? 1 : (action == GLFW_RELEASE ? 0 : d_pressed);
+    if (key == GLFW_KEY_LEFT)
+        left_pressed = action == GLFW_PRESS ? 1 : (action == GLFW_RELEASE ? 0 : left_pressed);
+    else if (key == GLFW_KEY_RIGHT)
+        right_pressed = action == GLFW_PRESS ? 1 : (action == GLFW_RELEASE ? 0 : right_pressed);
     
-    if (a_pressed)
-        camera.gotoLeft(0.5);
-    else if (d_pressed)
-        camera.gotoRight(0.5);
+    prevCarType = carType;
+    if (left_pressed)
+        carType++;
+    else if (right_pressed)
+        carType--;
+
+    carType = carType % nbCars;
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     camera.changeFOV(yoffset);
+}
+
+void processInput(GLFWwindow *window){
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.gotoLeft(0.5);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.gotoRight(0.5);
 }
