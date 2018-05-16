@@ -36,8 +36,8 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 int carType = 0;
-int nbCars = 2;
 int prevCarType = 0;
+vector<Model> models;
 
 int main(int argc, char** argv) {
 	
@@ -86,7 +86,10 @@ int main(int argc, char** argv) {
     glEnable(GL_DEPTH_TEST);
 
     // init model and particle
-    Model car("assets/van/kendo.obj");
+    models.push_back(Model("assets/van/kendo.obj"));
+    models.push_back(Model("assets/car/car.obj"));
+    models.push_back(Model("assets/bus/bus.obj"));
+
     Floor ground;
     Rain rainParticleSystem;
     std::vector<Smoke> smokeParticleSystem;
@@ -143,14 +146,6 @@ int main(int argc, char** argv) {
 
         processInput(window);
 
-        if (carType != prevCarType) {
-            if (carType == 0) {
-                car = Model("assets/van/kendo.obj");
-            } else {
-                car = Model("assets/car/car.obj");
-            }
-        }
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         rainParticleSystem.Update();
@@ -188,7 +183,7 @@ int main(int argc, char** argv) {
         shader.setVec3("light.ambient", 0.5f, 0.5f, 0.5f);
         shader.setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
         shader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-        car.Draw(shader);
+        models[carType].Draw(shader);
 
         floorShader.use();
         floorShader.setMat4("projection", projection);
@@ -236,13 +231,16 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
     else if (key == GLFW_KEY_RIGHT)
         right_pressed = action == GLFW_PRESS ? 1 : (action == GLFW_RELEASE ? 0 : right_pressed);
     
-    prevCarType = carType;
+    if (left_pressed || right_pressed)
+        prevCarType = carType;
+        
     if (left_pressed)
         carType++;
     else if (right_pressed)
         carType--;
-
-    carType = carType % nbCars;
+    if (carType < 0)
+        carType = models.size() - 1;
+    carType = carType % models.size();
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
