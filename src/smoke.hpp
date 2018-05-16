@@ -127,11 +127,12 @@ public:
 			model = glm::rotate(model, (float)glfwGetTime() * glm::radians(-55.0f), glm::vec3(1, 0, 0));
 			model = glm::rotate(model, (float)glfwGetTime() * glm::radians(-55.0f), glm::vec3(0, 1, 0));
 			
-			particle->scale = 0.02 + 0.2 * particle->dt;
+			particle->scale = 0.04 + 0.3 * particle->dt;
 			GLfloat currentScale = particle->scale;
 			model = glm::scale(model, glm::vec3(currentScale, currentScale, currentScale));
 			
-			shader.setFloat("opacity", 0.2f - particle->dt * 5);
+			// shader.setFloat("opacity", 0.2f - particle->dt * 5);
+			shader.setFloat("opacity", particle->life);
             
 			shader.setMat4("model", model);
             shader.setVec3("color", color);
@@ -156,7 +157,7 @@ private:
 		return (LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO))));
 	}
 	void createSmokeParticle(SmokeParticle* particle) {
-        particle->direction = glm::vec3(-1.0f, randRange(-0.02f, 0.02f), randRange(-0.02f, 0.02f));
+        particle->direction = glm::vec3(-1.0f, randRange(-0.1f, 0.1f), randRange(-0.1f, 0.1f));
         particle->velocity = randRange(5, 7);
 		particle->position = initialPos;
 		particle->life = randRange(maxLife/4, maxLife);

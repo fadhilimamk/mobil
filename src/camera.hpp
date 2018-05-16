@@ -21,6 +21,7 @@ class Camera {
         Right = glm::cross(Direction, Up);
         R = glm::distance(Target, Position);
         ZoomOut = ZOOM_OUT;
+        fov = 45.0f;
     }
 
     glm::mat4 getViewMatrix() {
@@ -41,11 +42,25 @@ class Camera {
         Right = glm::cross(Direction, Up);
     }
 
+    void changeFOV(float yoffset) {
+        if (fov >= 1.0f && fov <= 45.0f)
+            fov -= yoffset;
+        if (fov <= 1.0f)
+            fov = 1.0f;
+        if (fov >= 45.0f)
+            fov = 45.0f;
+    }
+
     float getZoomOut() {
         return ZoomOut;
     }
 
+    float getFOV() {
+        return fov;
+    }
+
     private:
+    float fov;
     float ZoomOut;
     float R;
     glm::vec3 Direction;

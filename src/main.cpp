@@ -17,6 +17,7 @@ using namespace std;
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 // screen settings
 const unsigned int SCR_WIDTH = 1024;
@@ -57,6 +58,7 @@ int main(int argc, char** argv) {
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
     glfwSetKeyCallback(window, keyCallback);
     glfwMakeContextCurrent(window);
+    glfwSetScrollCallback(window, scroll_callback);
 
     glewExperimental = true;
     if (glewInit() != GLEW_OK) {
@@ -71,10 +73,12 @@ int main(int argc, char** argv) {
     Shader smokeShader("src/vertex_shader_smoke.vs", "src/fragment_shader_smoke.fs");
 
     glShadeModel(GL_SMOOTH);
-    glClearColor(0.17, 0.18, 0.2, 1.0);
+    // glClearColor(0.17, 0.18, 0.2, 1.0);
+    glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
     glClearDepth(1.0);
 
     // enable depth buffer
+    glEnable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
 
     // init model and particle
@@ -84,32 +88,32 @@ int main(int argc, char** argv) {
     std::vector<Smoke> smokeParticleSystem;
     smokeParticleSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, -0.58f), // initial position
-        glm::vec3(1, 0, 0), //color
-        50, //amount
+        glm::vec3(0.1f, 0.1f, 0.1f), //color
+        25, //amount
         3, //life
         0.5f //scale
     ));
 
     smokeParticleSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, -0.47f), // initial position
-        glm::vec3(0, 1, 0), //color
-        50, //amount
+        glm::vec3(0.1f, 0.1f, 0.1f), //color
+        25, //amount
         3, //life
         0.5f //scale
     ));
 
     smokeParticleSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, 0.48f), // initial position
-        glm::vec3(0, 0, 1), //color
-        50, //amount
+        glm::vec3(0.1f, 0.1f, 0.1f), //color
+        25, //amount
         3, //life
         0.5f //scale
     ));
 
     smokeParticleSystem.push_back(Smoke(
         glm::vec3(-2.5f, 0.3f, 0.6f), // initial position
-        glm::vec3(1, 1, 0), //color
-        50, //amount
+        glm::vec3(0.1f, 0.1f, 0.1f), //color
+        25, //amount
         3, //life
         0.5f //scale
     ));
@@ -150,7 +154,7 @@ int main(int argc, char** argv) {
         float ratio = vp[2] * 1.0 / vp[3];
 
         // set projection matrix
-        glm::mat4 projection = glm::perspective(glm::radians(30.0f), ratio, 0.1f, 100.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(camera.getFOV()), ratio, 0.1f, 100.0f);
 
         // set model matrix
         glm::vec3 carPosition(0.0f, 0.0f, 0.0f);
@@ -174,7 +178,7 @@ int main(int argc, char** argv) {
 
         floorShader.use();
         floorShader.setMat4("projection", projection);
-        floorShader.setMat4("view", view);
+        floorShader.setMat4("view", originalView);
         floorShader.setMat4("model", model);
         floorShader.setVec3("lightPos", lightSource);
         floorShader.setVec3("viewPos", camera.Position);
@@ -220,5 +224,8 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
         camera.gotoLeft(0.5);
     else if (d_pressed)
         camera.gotoRight(0.5);
+}
 
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+    camera.changeFOV(yoffset);
 }
