@@ -17,6 +17,7 @@ using namespace std;
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 // screen settings
 const unsigned int SCR_WIDTH = 1024;
@@ -57,6 +58,7 @@ int main(int argc, char** argv) {
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
     glfwSetKeyCallback(window, keyCallback);
     glfwMakeContextCurrent(window);
+    glfwSetScrollCallback(window, scroll_callback);
 
     glewExperimental = true;
     if (glewInit() != GLEW_OK) {
@@ -147,7 +149,7 @@ int main(int argc, char** argv) {
         float ratio = vp[2] * 1.0 / vp[3];
 
         // set projection matrix
-        glm::mat4 projection = glm::perspective(glm::radians(30.0f), ratio, 0.1f, 100.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(camera.getFOV()), ratio, 0.1f, 100.0f);
 
         // set model matrix
         glm::vec3 carPosition(0.0f, 0.0f, 0.0f);
@@ -210,5 +212,8 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
         camera.gotoLeft(0.5);
     else if (d_pressed)
         camera.gotoRight(0.5);
+}
 
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+    camera.changeFOV(yoffset);
 }
